@@ -216,3 +216,12 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Project-specific data and artifacts
+data/chest_xray/
+outputs/
+*.keras
+*.ckpt
+*.h5
+*.tif
+*.tiff
