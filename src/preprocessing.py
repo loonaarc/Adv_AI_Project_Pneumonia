@@ -21,18 +21,17 @@ def load_images_from_directory(directory, shuffle=True):
 
 
 def resize_and_normalize(images):
-    """Resize images and normalize pixel values to [0, 1]."""
-    images = tf.image.resize(images, IMAGE_SIZE)
+    """Normalize pixel values to [0, 1] (images are already loaded at IMAGE_SIZE)."""
     images = tf.cast(images, tf.float32) / 255.0
     return images
 
 
-def convert_grayscale_to_three_channels(images):
-    """Convert grayscale images to 3-channel images when needed."""
+def ensure_three_channel_format(images):
+    """Ensure image tensors are 3-channel by converting or trimming when needed."""
     channels = images.shape[-1]
     if channels == 1:
         return tf.image.grayscale_to_rgb(images)
-    if channels and channels > 3:
+    if channels > 3:
         return images[..., :3]
     return images
 
@@ -55,7 +54,7 @@ def preprocess_dataset(dataset, augment=False, augmentation_layer=None):
 
     def _preprocess(images, labels):
         images = resize_and_normalize(images)
-        images = convert_grayscale_to_three_channels(images)
+        images = ensure_three_channel_format(images)
         if augment and augmentation_layer is not None:
             images = augmentation_layer(images, training=True)
         return images, labels

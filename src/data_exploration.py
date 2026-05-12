@@ -59,14 +59,12 @@ def save_example_grid(max_images_per_class: int = 4) -> None:
 
     columns = max_images_per_class
     rows = len(EXPECTED_CLASSES)
-    fig, axes = plt.subplots(rows, columns, figsize=(3 * columns, 3 * rows))
-    if rows == 1:
-        axes = [axes]
+    fig, axes = plt.subplots(rows, columns, figsize=(3 * columns, 3 * rows), squeeze=False)
 
     for row_idx, class_name in enumerate(EXPECTED_CLASSES):
         class_samples = [item for item in sample_paths if item[0] == class_name]
         for col_idx in range(columns):
-            ax = axes[row_idx][col_idx] if columns > 1 else axes[row_idx]
+            ax = axes[row_idx][col_idx]
             if col_idx < len(class_samples):
                 image = Image.open(class_samples[col_idx][1]).convert("L")
                 ax.imshow(image, cmap="gray")
