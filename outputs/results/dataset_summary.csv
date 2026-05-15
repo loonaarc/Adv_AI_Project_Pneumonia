@@ -1,0 +1,7 @@
+split,class,count
+test,NORMAL,158
+test,PNEUMONIA,428
+train,NORMAL,1266
+train,PNEUMONIA,3418
+val,NORMAL,159
+val,PNEUMONIA,427

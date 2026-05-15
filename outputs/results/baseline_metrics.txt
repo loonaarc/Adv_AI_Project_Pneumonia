@@ -1,0 +1,4 @@
+loss: 0.1909
+accuracy: 0.9283
+precision: 0.9488
+recall: 0.9533
