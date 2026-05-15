@@ -39,6 +39,14 @@ Because 16 validation images are not enough for reliable model selection, the no
 
 The split is saved to `outputs/results/dataset_split_80_10_10.csv`.
 
+Class distribution for the working split:
+
+![Class distribution by split](outputs/figures/class_distribution.png)
+
+Example training images:
+
+![Example training images](outputs/figures/example_images_grid.png)
+
 ## Data Preprocessing
 
 Images are loaded from the split manifest and processed as follows:
@@ -64,14 +72,38 @@ The model uses Adam, binary cross-entropy loss, and reports accuracy, precision,
 
 ## Baseline Results
 
-Fill this section after running the notebook end to end.
+The baseline CNN was trained for 5 epochs with early stopping monitoring validation loss. The validation curves are not fully smooth: training loss decreases steadily, while validation loss improves at first and then becomes unstable, including one epoch with a clear validation accuracy drop. This suggests that the baseline model is useful as a first reference, but not yet robust enough for final project conclusions.
 
 | Metric | Test result |
 | --- | ---: |
-| Loss | TODO |
-| Accuracy | TODO |
-| Precision | TODO |
-| Recall | TODO |
+| Loss | 0.1909 |
+| Accuracy | 0.9283 |
+| Precision | 0.9488 |
+| Recall | 0.9533 |
+
+Training curves:
+
+![Training curves](outputs/figures/training_curves.png)
+
+Detailed test classification report:
+
+| Class | Precision | Recall | F1-score | Support |
+| --- | ---: | ---: | ---: | ---: |
+| NORMAL | 0.8718 | 0.8608 | 0.8662 | 158 |
+| PNEUMONIA | 0.9488 | 0.9533 | 0.9510 | 428 |
+| Macro avg | 0.9103 | 0.9070 | 0.9086 | 586 |
+| Weighted avg | 0.9281 | 0.9283 | 0.9282 | 586 |
+
+Confusion matrix on the test split:
+
+| True class | Predicted NORMAL | Predicted PNEUMONIA |
+| --- | ---: | ---: |
+| NORMAL | 136 | 22 |
+| PNEUMONIA | 20 | 408 |
+
+Confusion matrix figure:
+
+![Confusion matrix](outputs/figures/confusion_matrix.png)
 
 Generated result files:
 
@@ -84,11 +116,13 @@ Generated result files:
 
 - The dataset is strongly imbalanced toward pneumonia cases.
 - The original validation split is too small, so an 80/10/10 stratified split is used for a more stable validation signal.
+- The baseline CNN reaches promising test performance, especially for pneumonia recall, but the validation curves are unstable.
+- The confusion matrix shows 20 false negatives for pneumonia and 22 false positives for pneumonia. For a medical screening task, false negatives are especially important and should be reduced further.
 - The baseline CNN provides a first performance reference, but the final project should compare stronger approaches such as transfer learning.
 
 ## Next Steps
 
-- Run the full notebook and record the final baseline metrics.
 - Inspect the confusion matrix, especially false negatives for pneumonia.
 - Consider class weighting or threshold tuning because the classes are imbalanced.
+- Repeat training or use cross-validation/stronger validation checks to confirm that the baseline performance is stable.
 - Try transfer learning with a pretrained CNN for the final submission.
