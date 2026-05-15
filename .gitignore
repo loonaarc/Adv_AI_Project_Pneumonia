@@ -219,6 +219,9 @@ __marimo__/
 
 # Project-specific data and artifacts
 data/chest_xray/
+/chest_xray/
+/chest-xray-pneumonia.zip
+/__MACOSX/
 outputs/
 *.keras
 *.ckpt
