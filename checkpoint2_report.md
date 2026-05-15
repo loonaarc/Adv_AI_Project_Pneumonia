@@ -74,6 +74,8 @@ The model uses Adam, binary cross-entropy loss, and reports accuracy, precision,
 
 The baseline CNN was trained for 5 epochs with early stopping monitoring validation loss. The validation curves are not fully smooth: training loss decreases steadily, while validation loss improves at first and then becomes unstable, including one epoch with a clear validation accuracy drop. This suggests that the baseline model is useful as a first reference, but not yet robust enough for final project conclusions.
 
+This instability is a key checkpoint finding. It may be caused by the class imbalance, the single random split, the small CNN architecture, or difficult individual X-ray images. Therefore, the test metrics below are treated as baseline evidence, not as final proof that the model is reliable.
+
 | Metric | Test result |
 | --- | ---: |
 | Loss | 0.1909 |
