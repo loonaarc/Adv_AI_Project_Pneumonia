@@ -245,3 +245,4 @@ data/chest_xray/
 !/outputs/results/baseline_metrics.txt
 !/outputs/results/classification_report.txt
 /outputs/models/
+!/outputs/results/dataset_split_80_10_10.csv
