@@ -128,3 +128,28 @@ Generated result files:
 - Consider class weighting or threshold tuning because the classes are imbalanced.
 - Repeat training or use cross-validation/stronger validation checks to confirm that the baseline performance is stable.
 - Try transfer learning with a pretrained CNN for the final submission.
+
+## Cross-Validation Added
+
+To address validation instability the notebook now includes a stratified 5-fold cross-validation routine that runs on the combined `train+val` set while keeping the `test` split as a held-out evaluation. The CV cell trains and evaluates the baseline model across five folds using class weighting, aggregates per-fold metrics (mean ± std), and saves the following outputs to `outputs/results/` and `outputs/models/`:
+
+- `cv_fold_metrics.csv` — per-fold numeric metrics
+- `cv_metrics_summary.csv` — aggregated mean and std for each metric
+- `cv_classification_reports.txt` — per-fold classification reports
+- `baseline_cv_fold_<n>.keras` — saved model for each fold (in `outputs/models/`)
+
+Use these CV results to select models or hyperparameters with lower variance, then retrain the selected model on the full `train+val` set and report final performance once on the held-out `test` split.
+
+### Appendix: What is Stratified k-Fold Cross-Validation?
+
+Stratified k-fold cross-validation splits the dataset into `k` disjoint folds while preserving the class distribution in each fold (stratification). For each of the `k` iterations, one fold is used as the validation set and the remaining `k-1` folds are used for training. The procedure returns `k` validation results which can be summarized as mean ± standard deviation to estimate both performance and variability.
+
+Why stratified? Because this dataset is imbalanced (more pneumonia than normal), stratification ensures each fold has similar NORMAL/PNEUMONIA proportions so that fold-to-fold performance differences are not caused by differing class mixes.
+
+Workflow recommended in this project:
+
+- Run stratified k-fold CV on `train+val` to choose models/hyperparameters.  
+- Retrain the chosen configuration on the full `train+val` set.  
+- Evaluate once on the untouched `test` split and report final metrics.
+
+This approach reduces variance from a single random split and gives more robust evidence when comparing models.
