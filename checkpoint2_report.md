@@ -72,7 +72,7 @@ The model uses Adam, binary cross-entropy loss, and reports accuracy, precision,
 
 ## Baseline Results
 
-The baseline CNN was trained for 5 epochs with early stopping monitoring validation loss. The validation curves are not fully smooth: training loss decreases steadily, while validation loss improves at first and then becomes unstable, including one epoch with a clear validation accuracy drop. This suggests that the baseline model is useful as a first reference, but not yet robust enough for final project conclusions.
+The baseline CNN was trained for 5 epochs with early stopping monitoring validation loss. The validation curves are not fully smooth: training loss decreases steadily, while validation loss improves at first and then becomes unstable, including one epoch with a clear validation accuracy drop. This suggests that the baseline model is useful as a first reference, but not yet robust enough for final conclusions.
 
 This instability is a key checkpoint finding. It may be caused by the class imbalance, the single random split, the small CNN architecture, or difficult individual X-ray images. Therefore, the test metrics below are treated as baseline evidence, not as final proof that the model is reliable.
 
@@ -83,11 +83,11 @@ This instability is a key checkpoint finding. It may be caused by the class imba
 | Precision | 0.9488 |
 | Recall | 0.9533 |
 
-Baseline training curves without cross-validation:
+Baseline training curves:
 
 ![Training curves](outputs/figures/training_curves.png)
 
-The unstable validation curve in this baseline run motivates the notebook's optional stratified 5-fold cross-validation section. It runs on the combined `train+val` split, keeps the `test` split untouched, and is intended for more robust model or hyperparameter selection before final testing.
+The unstable validation curve in this baseline run shows a limitation of relying on one validation split. Simpler ways to reduce this issue would be to repeat training with different random seeds, apply class weighting, or tune the classification threshold. Stratified k-fold cross-validation could also help if more compute is available, but it is not required for this baseline checkpoint.
 
 Detailed test classification report:
 
@@ -121,14 +121,7 @@ Generated result files:
 - The dataset is strongly imbalanced toward pneumonia cases.
 - The original validation split is too small, so an 80/10/10 stratified split is used for a more stable validation signal.
 - The baseline CNN reaches promising test performance, especially for pneumonia recall, but the validation curves are unstable.
-- Stratified 5-fold cross-validation is included in the notebook as a robustness check for the unstable single validation split.
+- The unstable validation curve shows that the single validation split should be interpreted cautiously; class weighting, threshold tuning, or repeated runs could make the estimate more reliable.
 - The confusion matrix shows 20 false negatives for pneumonia and 22 false positives for pneumonia. For a medical screening task, false negatives are especially important and should be reduced further.
-- The baseline CNN provides a first performance reference, but the final project should compare stronger approaches such as transfer learning.
-
-## Next Steps
-
-- Inspect the confusion matrix, especially false negatives for pneumonia.
-- Consider class weighting or threshold tuning because the classes are imbalanced.
-- Use the notebook's cross-validation routine to compare future models or hyperparameters more reliably.
-- Try transfer learning with a pretrained CNN for the final submission.
+- The baseline CNN provides a first performance reference, but it should not be treated as a final reliable medical model.
 
