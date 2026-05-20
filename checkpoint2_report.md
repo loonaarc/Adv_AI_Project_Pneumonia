@@ -1,5 +1,7 @@
 # Checkpoint 2 Report: Pneumonia Detection from Chest X-Rays
 
+Lilie Lin, Junu Rahman, Arooj Shahzadi
+
 ## Project Goal
 
 The goal is to build a binary image classifier that distinguishes **NORMAL** and **PNEUMONIA** chest X-ray images.
