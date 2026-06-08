@@ -41,6 +41,17 @@ Because 16 validation images are not enough for reliable model selection, the no
 
 The split is saved to `outputs/results/dataset_split_80_10_10.csv`.
 
+The dataset is imbalanced toward pneumonia images. In the working split, the
+training set contains 1,266 NORMAL images and 3,418 PNEUMONIA images. This
+imbalance is important because a model can achieve high accuracy while still
+performing worse on the minority class.
+
+Patient-level leakage is an important limitation. This Kaggle release does not
+provide a separate patient metadata table, and the filenames are not documented
+as reliable patient identifiers. Therefore, the split used here is an
+image-level stratified split. If patient IDs were available, all images from the
+same patient should be assigned to only one split using a grouped split.
+
 Class distribution for the working split:
 
 ![Class distribution by split](outputs/figures/class_distribution.png)
@@ -48,6 +59,14 @@ Class distribution for the working split:
 Example training images:
 
 ![Example training images](outputs/figures/example_images_grid.png)
+
+Manual visual inspection of the sample grid shows that the images are generally
+recognizable chest X-rays, but they vary in brightness, contrast, size, and
+positioning. Some cases are visually harder than others. From a non-expert
+perspective, the difference between NORMAL and PNEUMONIA is not always obvious:
+pneumonia cases may show cloudier or more opaque lung regions, but the pattern
+is often subtle. The backup notebook also includes a small image-quality sample
+check for contrast and a sharpness proxy.
 
 ## Data Preprocessing
 
@@ -57,9 +76,20 @@ Images are loaded from the split manifest and processed as follows:
 - resize to `224 x 224`
 - convert grayscale images to 3 channels for CNN compatibility
 - normalize pixel values to `[0, 1]`
-- apply data augmentation only to the training split
+- apply online data augmentation only to the training split
 
-Training augmentation includes small rotations, zoom, horizontal flip, and contrast variation.
+Training augmentation includes small rotations, zoom, horizontal flip, and
+contrast variation. Augmentation is online, so no extra image files are written
+to disk. Each epoch still iterates over 4,684 training images, but the model may
+see randomly transformed versions across epochs. Because augmentation is applied
+uniformly to training batches, the original class distribution is preserved; it
+does not oversample NORMAL images.
+
+Horizontal flipping is used cautiously. For this binary task, the label only
+indicates whether pneumonia is present, not whether it is left-sided or
+right-sided. A flip should therefore not change the target label. However,
+flipping would be less appropriate for medical tasks where laterality or
+anatomical orientation is part of the prediction target.
 
 ## Baseline Model
 
@@ -71,6 +101,10 @@ The baseline is a small convolutional neural network:
 - sigmoid output for binary classification
 
 The model uses Adam, binary cross-entropy loss, and reports accuracy, precision, and recall.
+
+The backup notebook now exports a baseline architecture table to
+`outputs/results/baseline_architecture.csv`, including each layer, output shape,
+and parameter count.
 
 ## Baseline Results
 
@@ -84,6 +118,13 @@ This instability is a key checkpoint finding. It may be caused by the class imba
 | Accuracy | 0.9283 |
 | Precision | 0.9488 |
 | Recall | 0.9533 |
+
+The backup notebook also computes ROC-AUC, Precision-Recall AUC, and a
+threshold analysis table. The default threshold of 0.5 is used for the baseline
+classification report, but this is only a starting point. In a medical screening
+setting, false negatives are especially costly, so threshold selection should be
+performed on the validation set using sensitivity, specificity, and clinical
+cost trade-offs.
 
 Baseline training curves:
 
@@ -117,6 +158,9 @@ Generated result files:
 - `outputs/results/classification_report.txt`
 - `outputs/figures/training_curves.png`
 - `outputs/figures/confusion_matrix.png`
+- `outputs/figures/roc_curve.png`
+- `outputs/figures/precision_recall_curve.png`
+- `outputs/results/threshold_analysis.csv`
 
 ## Initial Observations
 
@@ -126,4 +170,5 @@ Generated result files:
 - The unstable validation curve shows that the single validation split should be interpreted cautiously; class weighting, threshold tuning, or repeated runs could make the estimate more reliable.
 - The confusion matrix shows 20 false negatives for pneumonia and 22 false positives for pneumonia. For a medical screening task, false negatives are especially important and should be reduced further.
 - The baseline CNN provides a first performance reference, but it should not be treated as a final reliable medical model.
+- Reproducibility files are included as `requirements.txt` and `python_version.txt`.
 
