@@ -65,7 +65,7 @@ recognizable chest X-rays, but they vary in brightness, contrast, size, and
 positioning. Some cases are visually harder than others. From a non-expert
 perspective, the difference between NORMAL and PNEUMONIA is not always obvious:
 pneumonia cases may show cloudier or more opaque lung regions, but the pattern
-is often subtle. The backup notebook also includes a small image-quality sample
+is often subtle. The checkpoint feedback notebook also includes a small image-quality sample
 check for contrast and a sharpness proxy.
 
 ## Data Preprocessing
@@ -102,7 +102,7 @@ The baseline is a small convolutional neural network:
 
 The model uses Adam, binary cross-entropy loss, and reports accuracy, precision, and recall.
 
-The backup notebook now exports a baseline architecture table to
+The checkpoint feedback notebook now exports a baseline architecture table to
 `outputs/results/baseline_architecture.csv`, including each layer, output shape,
 and parameter count.
 
@@ -114,12 +114,12 @@ This instability is a key checkpoint finding. It may be caused by the class imba
 
 | Metric | Test result |
 | --- | ---: |
-| Loss | 0.1909 |
-| Accuracy | 0.9283 |
-| Precision | 0.9488 |
-| Recall | 0.9533 |
+| Loss | 0.1646 |
+| Accuracy | 0.9386 |
+| Precision | 0.9712 |
+| Recall | 0.9439 |
 
-The backup notebook also computes ROC-AUC, Precision-Recall AUC, and a
+The checkpoint feedback notebook also computes ROC-AUC, Precision-Recall AUC, and a
 threshold analysis table. The default threshold of 0.5 is used for the baseline
 classification report, but this is only a starting point. In a medical screening
 setting, false negatives are especially costly, so threshold selection should be
@@ -136,17 +136,17 @@ Detailed test classification report:
 
 | Class | Precision | Recall | F1-score | Support |
 | --- | ---: | ---: | ---: | ---: |
-| NORMAL | 0.8718 | 0.8608 | 0.8662 | 158 |
-| PNEUMONIA | 0.9488 | 0.9533 | 0.9510 | 428 |
-| Macro avg | 0.9103 | 0.9070 | 0.9086 | 586 |
-| Weighted avg | 0.9281 | 0.9283 | 0.9282 | 586 |
+| NORMAL | 0.8588 | 0.9241 | 0.8902 | 158 |
+| PNEUMONIA | 0.9712 | 0.9439 | 0.9573 | 428 |
+| Macro avg | 0.9150 | 0.9340 | 0.9238 | 586 |
+| Weighted avg | 0.9409 | 0.9386 | 0.9393 | 586 |
 
 Confusion matrix on the test split:
 
 | True class | Predicted NORMAL | Predicted PNEUMONIA |
 | --- | ---: | ---: |
-| NORMAL | 136 | 22 |
-| PNEUMONIA | 20 | 408 |
+| NORMAL | 146 | 12 |
+| PNEUMONIA | 24 | 404 |
 
 Confusion matrix figure:
 
@@ -161,6 +161,11 @@ Generated result files:
 - `outputs/figures/roc_curve.png`
 - `outputs/figures/precision_recall_curve.png`
 - `outputs/results/threshold_analysis.csv`
+Transfer-learning model comparison and validation-based final model selection
+are continued in the separate draft notebook
+`pneumonia_detection_project_submission.ipynb`. This keeps checkpoint 2 focused
+on the implemented feedback for data understanding, preprocessing, baseline
+architecture, and baseline evaluation.
 
 ## Initial Observations
 
@@ -168,7 +173,8 @@ Generated result files:
 - The original validation split is too small, so an 80/10/10 stratified split is used for a more stable validation signal.
 - The baseline CNN reaches promising test performance, especially for pneumonia recall, but the validation curves are unstable.
 - The unstable validation curve shows that the single validation split should be interpreted cautiously; class weighting, threshold tuning, or repeated runs could make the estimate more reliable.
-- The confusion matrix shows 20 false negatives for pneumonia and 22 false positives for pneumonia. For a medical screening task, false negatives are especially important and should be reduced further.
+- The baseline confusion matrix shows 24 false negatives for pneumonia and 12 false positives for pneumonia at threshold 0.5. For a medical screening task, false negatives are especially important and should be reduced further.
+- The separate project-submission notebook continues with validation-based model comparison and validation-based threshold selection before final selected-model test evaluation.
 - The baseline CNN provides a first performance reference, but it should not be treated as a final reliable medical model.
 - Reproducibility files are included as `requirements.txt` and `python_version.txt`.
 
