@@ -275,9 +275,8 @@ Important generated files:
 - `outputs/results/model_selection_summary.csv`
 - `outputs/results/selected_model_test_metrics.csv`
 - `outputs/results/gradcam_summary.csv`
-- `outputs/models/baseline_cnn.keras`
-- `outputs/models/mobilenetv2_transfer.keras`
-- `outputs/models/densenet121_transfer.keras`
+
+The notebook also saves trained Keras model files in `outputs/models/`. These model files are treated as regenerated artifacts rather than repository files because the baseline model is too large for normal GitHub storage.
 
 ## 13. Conclusion
 

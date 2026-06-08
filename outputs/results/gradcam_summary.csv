@@ -1,0 +1,4 @@
+model,gradcam_target,true_label,predicted_label,pneumonia_probability,threshold,figure,interpretation_note
+Baseline CNN,"{'kind': 'top_level', 'layer_name': 'conv2d_5'}",NORMAL,NORMAL,0.3656080663204193,0.45,/content/outputs/figures/gradcam_baseline_cnn_1.png,"Review whether highlighted regions overlap lung fields; Grad-CAM is supportive, not diagnostic evidence."
+Baseline CNN,"{'kind': 'top_level', 'layer_name': 'conv2d_5'}",NORMAL,NORMAL,0.2753256857395172,0.45,/content/outputs/figures/gradcam_baseline_cnn_2.png,"Review whether highlighted regions overlap lung fields; Grad-CAM is supportive, not diagnostic evidence."
+Baseline CNN,"{'kind': 'top_level', 'layer_name': 'conv2d_5'}",PNEUMONIA,PNEUMONIA,0.9984297156333923,0.45,/content/outputs/figures/gradcam_baseline_cnn_3.png,"Review whether highlighted regions overlap lung fields; Grad-CAM is supportive, not diagnostic evidence."

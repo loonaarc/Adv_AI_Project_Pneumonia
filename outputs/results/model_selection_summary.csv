@@ -1,0 +1,2 @@
+selected_model,selection_metric,target_pneumonia_recall,selected_threshold,threshold_selection_rule
+Baseline CNN,"validation PR-AUC, then ROC-AUC and recall",0.95,0.45,highest specificity while recall >= 0.95

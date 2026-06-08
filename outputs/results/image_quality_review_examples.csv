@@ -1,0 +1,7 @@
+path,class,width,height,mean_brightness,contrast_std,sharpness_proxy,low_contrast_flag,possible_blur_flag,review_reason
+/content/chest_xray/train/PNEUMONIA/person276_virus_569.jpeg,PNEUMONIA,546,219,71.1429214477539,31.880048751831055,13.358685493469238,False,True,lowest contrast
+/content/chest_xray/train/PNEUMONIA/person954_virus_1626.jpeg,PNEUMONIA,1076,630,117.3890609741211,39.43525695800781,9.807296752929688,False,True,lowest contrast
+/content/chest_xray/train/NORMAL/NORMAL2-IM-0531-0001.jpeg,NORMAL,1744,1345,96.18757629394531,50.128875732421875,66.74685668945312,False,False,lowest contrast
+/content/chest_xray/train/PNEUMONIA/person954_virus_1626.jpeg,PNEUMONIA,1076,630,117.3890609741211,39.43525695800781,9.807296752929688,False,True,lowest sharpness
+/content/chest_xray/train/PNEUMONIA/person276_virus_569.jpeg,PNEUMONIA,546,219,71.1429214477539,31.880048751831055,13.358685493469238,False,True,lowest sharpness
+/content/chest_xray/test/NORMAL/IM-0089-0001.jpeg,NORMAL,2426,2076,136.2407684326172,61.799888610839844,16.63338279724121,False,True,lowest sharpness
